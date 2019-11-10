@@ -4,6 +4,7 @@ export enum RunType { Walk, Run, Bike }
 
 export class Run {
   @IsNumber() @IsOptional() readonly id: number;
+  @IsNumber() readonly userId: number;
   @IsEnum(RunType) readonly runType: RunType;
   @IsDateString() readonly startDate: Date;
   @IsDateString() readonly endDate: Date;

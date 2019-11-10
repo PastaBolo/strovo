@@ -15,6 +15,11 @@ export class RunsService {
     else throw new Error('Run not found');
   }
 
+  findByAuthor(userId: number): Run[] {
+    console.log(typeof userId);
+    return Object.values(this.runs).filter((run: Run) => run.userId == userId);
+  }
+
   create(newRun: Run): Run {
     const id = new Date().valueOf();
     const run = { ...newRun, id };
