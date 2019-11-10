@@ -21,6 +21,6 @@ export class UsersController {
 
   @Get('stats/:id')
   findStats(@Param('id', new ParseIntPipe()) userId: number): Run[] {
-    return this.runsService.findByAuthor(userId);
+    return this.runsService.findByUser(userId);
   }
 }

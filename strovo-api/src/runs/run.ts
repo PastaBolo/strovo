@@ -4,7 +4,7 @@ export enum RunType { Walk, Run, Bike }
 
 export class Run {
   @IsNumber() @IsOptional() readonly id: number;
-  @IsNumber() readonly userId: number;
+  @IsNumber() @IsOptional() readonly userId: number; // TODO Create an interface and remove userId from this class
   @IsEnum(RunType) readonly runType: RunType;
   @IsDateString() readonly startDate: Date;
   @IsDateString() readonly endDate: Date;

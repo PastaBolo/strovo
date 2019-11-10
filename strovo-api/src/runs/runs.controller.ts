@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { Run } from './run';
 import { RunsService } from './runs.service';
@@ -17,18 +18,15 @@ export class RunsController {
     return this.runsService.find(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() run: Run): Run {
-    return this.runsService.create(run);
+  create(@Request() req, @Body() run: Run): Run {
+    return this.runsService.create({ ...run, userId: req.user.userId });
   }
 
-  @Put()
-  update(@Body() item: Run): Run {
-    return this.runsService.update(item);
-  }
-
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    this.runsService.delete(id);
+  delete(@Request() req, @Param('id') id: number) {
+    this.runsService.delete(id, req.user.userId);
   }
 }

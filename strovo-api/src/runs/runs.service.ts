@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Run, Runs } from './run';
 
 @Injectable()
@@ -15,9 +15,8 @@ export class RunsService {
     else throw new Error('Run not found');
   }
 
-  findByAuthor(userId: number): Run[] {
-    console.log(typeof userId);
-    return Object.values(this.runs).filter((run: Run) => run.userId == userId);
+  findByUser(userId: number): Run[] {
+    return Object.values(this.runs).filter((run: Run) => run.userId === userId);
   }
 
   create(newRun: Run): Run {
@@ -27,17 +26,10 @@ export class RunsService {
     return run;
   }
 
-  update(updatedRun: Run): Run {
-    if (this.runs[updatedRun.id]) {
-      this.runs[updatedRun.id] = updatedRun; return updatedRun;
-    } else {
-      throw new Error('Update : run not found');
-    }
-  }
-
-  delete(id: number) {
+  delete(id: number, userId: number) {
     const run = this.runs[id];
-    if (run) delete this.runs[id];
+    if (run && run.userId === userId) delete this.runs[id];
+    if (run && run.userId !== userId) throw new UnauthorizedException();
     else throw new Error('Delete : run not found');
   }
 }
