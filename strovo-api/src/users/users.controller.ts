@@ -1,7 +1,7 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { User, Users } from './user';
+import { User } from './user';
 import { RunsService } from '../runs/runs.service';
 import { Run } from '../runs/run';
 
@@ -10,7 +10,7 @@ export class UsersController {
   constructor(private usersService: UsersService, private runsService: RunsService) { }
 
   @Get()
-  findAll(): Users {
+  findAll(): User[] {
     return this.usersService.findAll();
   }
 

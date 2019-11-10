@@ -8,5 +8,6 @@ import { RunsModule } from 'src/runs/runs.module';
   imports: [RunsModule],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService]
 })
 export class UsersModule { }
