@@ -1,6 +1,6 @@
-import { Run } from '../runs/run';
+import { Document } from 'mongoose';
 
-export interface User {
+export interface User extends Document {
   readonly id: number;
   readonly username: string;
   readonly password: string;

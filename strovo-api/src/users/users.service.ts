@@ -1,25 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Model } from 'mongoose';
+
 import { User } from './user';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    { id: 1, username: 'John', password: 'p4ssw0rd' },
-    { id: 2, username: 'Jack', password: 'p4ssw0rd' },
-    { id: 3, username: 'Ema', password: 'p4ssw0rd' },
-  ];
+  constructor(@Inject('UsersModelToken') private readonly UserModel: Model<User>) { }
 
-  findAll(): User[] {
-    return this.users;
+  async findAll(): Promise<User[]> {
+    const users = await this.UserModel.find();
+    return users.map(user => user.toJSON()).map(({ password, ...result }) => result);
   }
 
-  find(id: number): User {
-    const user = this.users[id];
-    if (user) return user;
-    else throw new Error('Run not found');
+  async find(id: number): Promise<User> {
+    const user = await this.UserModel.findOne({ id });
+    if (user) {
+      const { password, ...result } = user.toJSON();
+      return result;
+    } else throw new Error('Run not found');
   }
 
-  findByUsername(username: string) {
-    return this.users.find(user => user.username === username);
+  async findByUsername(username: string) {
+    return await this.UserModel.findOne({ username });
   }
 }

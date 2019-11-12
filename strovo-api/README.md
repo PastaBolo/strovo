@@ -1,32 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Strovo Api
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This API uses a MongoDB database hosted by [mLab](https://mlab.com/)
 
 ## Installation
 
@@ -42,34 +16,99 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+> The server is running on port 3000
+
+---
+
+## Usage
+
+### 3 users available
+
+```json
+{"id": 1, "username": "John", "password": "p4ssw0rd"}
+{"id": 2, "username": "Jack", "password": "p4ssw0rd"}
+{"id": 3, "username": "Ema", "password": "p4ssw0rd"}
+```
+
+### Connection
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+curl -X POST -H 'Content-Type: application/json' -d '{
+  "username": "John",
+  "password": "p4ssw0rd"
+}' http://localhost:3000/auth/login -i
 ```
 
-## Support
+> This command returns an access token to include in request header for run creation and removal, like this : 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzU2NjQ5NiwiZXhwIjoxNTczNTcwMDk2fQ.htMC74MNXp1zy-E7FknfWvKsY_WanxZwARU9Lm72Zi0"
+```
 
-## Stay in touch
+### Run API
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### Create a run
 
-## License
+```bash
+curl -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." -d '{
+  "runType": "Walk",
+  "startDate": "1995-11-24T27:00:00.000Z",
+  "endDate": "1995-11-25T23:00:00.000Z",
+  "distance": 10,
+  "calories": 750
+}' http://localhost:3000/runs -i
+```
 
-  Nest is [MIT licensed](LICENSE).
+> This command returns the created run
+
+```json
+{
+  "id":1573567121440,
+  "userId":"1",
+  "runType":"Walk",
+  "startDate":"1995-11-24T27:00:00.000Z",
+  "endDate":"1995-11-25T23:00:00.000Z",
+  "distance":10,
+  "calories":750
+}
+```
+
+#### Delete a run
+
+A user can only delete his own runs
+
+```bash
+# /runs/{id}
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." -X DELETE http://localhost:3000/runs/1573567121440
+```
+
+### User API
+
+#### Get all users
+
+```bash
+# /users
+
+curl http://localhost:3000/users -i
+```
+
+#### Get a user by id
+
+```bash
+# /users/{id}
+
+curl http://localhost:3000/users/1 -i
+```
+
+#### Get user stats
+
+```bash
+# /users/stats/{id}?startDate={startDate}&endDate={endDate}
+# startDate and endDate format is ISO string
+# startDate and/or endDate are optional (you can use of one them or both)
+
+curl http://localhost:3000/users/stats/1?startDate=2019-12-02T27:00:00.000Z&endDate=2019-12-04T27:00:00.000Z -i
+```

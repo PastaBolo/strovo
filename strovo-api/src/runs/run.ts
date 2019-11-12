@@ -1,15 +1,19 @@
-import { IsNumber, IsEnum, IsDateString, IsOptional } from 'class-validator';
+import { IsNumber, IsPositive, IsEnum, IsDateString, IsOptional } from 'class-validator';
 
-export enum RunType { Walk, Run, Bike }
+export enum RunTypes {
+  Walk = 'Walk',
+  Run = 'Run',
+  Bike = 'Bike',
+}
 
 export class Run {
   @IsNumber() @IsOptional() readonly id: number;
-  @IsNumber() @IsOptional() readonly userId: number; // TODO Create an interface and remove userId from this class
-  @IsEnum(RunType) readonly runType: RunType;
-  @IsDateString() readonly startDate: Date;
-  @IsDateString() readonly endDate: Date;
-  @IsNumber() readonly distance: number;
-  @IsNumber() readonly calories: number;
+  @IsNumber() @IsOptional() readonly userId: number;
+  @IsEnum(RunTypes) readonly runType: RunTypes;
+  @IsDateString() readonly startDate: string;
+  @IsDateString() readonly endDate: string;
+  @IsPositive() readonly distance: number;
+  @IsPositive() readonly calories: number;
 }
 
 export interface Runs {
