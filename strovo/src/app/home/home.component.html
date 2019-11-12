@@ -1,0 +1,11 @@
+<h2>Users</h2>
+
+<div *ngFor="let user of usersService.users$ | async ">
+  <button [routerLink]="['/user', user.id]">{{ user.username }}</button>
+</div>
+
+<!-- <h2>Stats</h2>
+<div *ngFor="let user of users$ | async ">
+  <button (click)="getUserStats(user.id)">{{ user.username }}</button>
+  <button (click)="getUserStatsWithDates(user.id)">{{ user.username }} (dates)</button>
+</div> -->

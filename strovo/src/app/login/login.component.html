@@ -1,0 +1,5 @@
+<h2>Connexion</h2>
+
+<div *ngFor="let user of users$ | async ">
+  <button (click)="login(user.username, 'p4ssw0rd')">{{ user.username }}</button>
+</div>

@@ -1,0 +1,33 @@
+<div *ngIf="user$ | async as user">{{ user.username }}</div>
+
+<div *ngIf="userStats$ | async as userStats">
+  <div *ngFor="let runType of runTypes | keyvalue">
+    <i class="material-icons">{{ icons[runType.value] }}</i> : {{ userStats[runType.key] | json }}
+  </div>
+</div>
+
+<form #runForm="ngForm" (submit)="addRun(runForm.value)">
+  <label for="runType">Run type</label>
+<select id="runType" ngModel name="type">
+  <option *ngFor="let runType of runTypes | keyvalue" [ngValue]="runType.key">{{ runType.value }}</option>
+</select>
+<div>
+  <label>Start date</label>
+  <input type="text" placeholder="--/--/----" ngModel name="startDate">
+  <input type="text" placeholder ="--:--" ngModel name="startTime">
+</div>
+<div>
+  <label>End date</label>
+  <input type="text" placeholder="--/--/----" ngModel name="endDate">
+  <input type="text" placeholder ="--:--" ngModel name="endTime">
+</div>
+<div>
+  <label for="distance">Distance</label>
+  <input id="distance" type="number" ngModel name="distance">
+</div>
+<div>
+  <label for="calories">Calories</label>
+  <input id="calories" type="number" ngModel name="calories">
+</div>
+<button type="submit">Add run</button>
+</form>
